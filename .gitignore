@@ -1,1 +1,13 @@
 venv
+
+*.terraform*
+*.tfstate
+*.tfstate.*
+*.tfvars
+
+# dbt
+logs/
+transform/target/
+transform/dbt_packages/
+transform/logs/
+transform/dbt_internal_packages/
