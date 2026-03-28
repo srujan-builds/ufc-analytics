@@ -1,0 +1,6 @@
+pandas
+requests
+ipykernel
+tqdm
+beautifulsoup4
+dbt-snowflake
