@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw_data
+    database: ufc_analytics
+    schema: raw
+    tables:
+      - name: raw_ufc_fighters
+      - name: raw_ufc_events

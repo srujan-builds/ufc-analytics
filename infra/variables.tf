@@ -26,10 +26,15 @@ variable "warehouse" {
 variable "schema_names" {
     type = set(string)
     description = "List of schemas to create in the UFC database"
-    default = [ "RAW", "STG", "INT", "MARTS" ]
+    default = [ "RAW", "STAGE", "INTERMEDIATE", "MARTS" ]
 }
 
 variable "internal_stage" {
     description = "An internal stage for uploading static files"
     default = "UFC_STAGE"
+}
+
+variable "csv_file_format" {
+    description = "File format for csv files"
+    default = "csv_file_format"
 }

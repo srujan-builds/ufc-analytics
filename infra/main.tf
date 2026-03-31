@@ -14,7 +14,7 @@ provider "snowflake" {
     role              = "SYSADMIN"
     authenticator     = "SNOWFLAKE_JWT"
     private_key       = file(var.private_key_path)
-    preview_features_enabled = [ "snowflake_stage_resource" ]
+    preview_features_enabled = [ "snowflake_stage_resource" , "snowflake_file_format_resource"]
 }
 
 resource "snowflake_database" "ufc_db" {
@@ -39,4 +39,14 @@ resource "snowflake_stage" "ufc_stage" {
     name = var.internal_stage
     database = snowflake_database.ufc_db.name
     schema = snowflake_schema.ufc_schemas["RAW"].name
+}
+
+resource "snowflake_file_format" "file_format" {
+    name = var.csv_file_format
+    database = snowflake_database.ufc_db.name
+    schema = snowflake_schema.ufc_schemas["RAW"].name
+    format_type = "CSV"
+    field_delimiter = ","
+    skip_header = 1
+    field_optionally_enclosed_by = "\""
 }
