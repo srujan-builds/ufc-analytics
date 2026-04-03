@@ -7,9 +7,9 @@ select distinct
     trim(last_name) as last_name,
     trim(nickname) as nickname,
     trim(fighter_url) as fighter_url,
-    replace(trim(height),'--', 'NA') as height,
-    replace(trim(weight),'--','NA') as weight,
-    replace(trim(stance),'--', 'NA') as stance,
-    replace(trim(reach),'--','NA') as reach,
+    nullif(trim(height), '--') as height,
+    nullif(trim(weight), '--') as weight,
+    nullif(trim(stance), '--') as stance,
+    nullif(trim(reach), '--') as reach,
     extracted_at
 from raw_ufc_fighters

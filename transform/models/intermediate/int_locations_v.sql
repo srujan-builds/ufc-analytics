@@ -14,10 +14,15 @@ from stg_locations
 )
 
 
-select 
+select distinct
     {{ generate_location_id('event_location') }} as location_id,
     city,
     state,
     country,
     extracted_at
 from location_details
+-- duplicate handling
+qualify row_number() over (
+    partition by city, state, country
+    order by extracted_at desc
+) = 1
