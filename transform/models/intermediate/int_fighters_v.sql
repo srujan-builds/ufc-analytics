@@ -1,4 +1,4 @@
-with stg_fighters_v as (
+with stg_fighters as (
     select * from {{ ref('stg_fighters_v') }}
 ),
 
@@ -15,7 +15,7 @@ reformed_data as (
         regexp_substr(reach, '([0-9]+.0)\"',1,1,'e') as reach_inch,
         stance,
         extracted_at
-    from stg_fighters_v
+    from stg_fighters
 )
 
 select distinct

@@ -6,7 +6,7 @@
     )
 }}
 
-with int_events_v as (
+with int_events as (
     select * from {{ ref('int_events_v') }}
 )
 
@@ -19,7 +19,7 @@ select
     location_id,
     extracted_at,
     current_timestamp()::timestamp_ntz(0) as updated_at
-from int_events_v
+from int_events
 {%  if is_incremental() %}
     where extracted_at > (select coalesce(max(extracted_at), '1900-01-01') from {{this}})
 {% endif %}

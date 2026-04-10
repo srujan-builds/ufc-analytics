@@ -1,4 +1,4 @@
-with stg_fights_v as (
+with stg_fights as (
     select * from {{ ref('stg_fights_v') }}
 ),
 
@@ -6,6 +6,7 @@ parsed_fights as (
     select 
         {{ generate_fight_id('fight_url') }} as fight_id,
         {{ generate_event_id('event_url') }} as event_id,
+        championship_bout,
         {{ generate_fighter_id('fighter_1_url') }} as fighter_1_id,
         {{ generate_fighter_id('fighter_2_url') }} as fighter_2_id,
         {{ generate_fighter_id('winner_url') }} as winner_id,
@@ -28,19 +29,21 @@ parsed_fights as (
         round_num::int as round_num,
         fight_time,
         extracted_at
-    from stg_fights_v
+    from stg_fights
 ),
 
 fighter_1_perspective as (
     select 
         fight_id,
         event_id,
+        championship_bout,
         fighter_1_id as fighter_id,
         fighter_2_id as opponent_id,
+        match_outcome,
         case
-            when match_outcome ='win' and fighter_1_id = winner_id then 1
-            when match_outcome != 'win' then 0
-            else 0
+            when match_outcome ='win' and fighter_1_id = winner_id then true
+            -- when match_outcome != 'win' then 0
+            else false
         end as is_winner,
 
         kd_1 as knockdowns,
@@ -60,14 +63,14 @@ fighter_2_perspective as (
     select 
         fight_id,
         event_id,
+        championship_bout,
         fighter_2_id as fighter_id,
         fighter_1_id as opponent_id,
+        match_outcome,
         case
-            when match_outcome ='win' and fighter_2_id = winner_id then 1
-            when match_outcome != 'win' then 0
-            else 0
+            when match_outcome ='win' and fighter_2_id = winner_id then true
+            else false
         end as is_winner,
-
         kd_2 as knockdowns,
         str_2 as strikes_landed,
         td_2 as takedowns,
@@ -87,8 +90,9 @@ union all
 select * from fighter_2_perspective
 )
 
--- deduplicate logic
 select * from combined_perspective
+
+-- deduplicate logic
 qualify row_number() over (
     partition by fight_id, fighter_id
     order by extracted_at desc

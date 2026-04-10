@@ -6,7 +6,7 @@
     )
 }}
 
-with int_locations_v as(
+with int_locations as(
     select * from {{ ref('int_locations_v') }}
 )
 
@@ -17,7 +17,7 @@ select
     country,
     extracted_at,
     current_timestamp()::timestamp_ntz(0) as updated_at
-from int_locations_v
+from int_locations
 {%  if is_incremental() %}
     where extracted_at > (select coalesce(max(extracted_at), '1900-01-01') from {{this}})
 {% endif %}

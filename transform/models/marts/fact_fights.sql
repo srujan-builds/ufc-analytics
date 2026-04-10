@@ -7,15 +7,17 @@
     )
 }}
 
-with int_fights_v as (
+with int_fights as (
     select * from {{ ref('int_fights_v') }}
 )
 
 select 
     fight_id,
     event_id,
+    championship_bout,
     fighter_id,
     opponent_id,
+    match_outcome,
     is_winner,
     knockdowns,
     strikes_landed,
@@ -27,7 +29,7 @@ select
     fight_time,
     extracted_at,
     current_timestamp()::timestamp_ntz(0) as updated_at
-from int_fights_v
+from int_fights
 {% if is_incremental() %}
     where extracted_at > (select max(extracted_at) from {{this}})
 {% endif %}
