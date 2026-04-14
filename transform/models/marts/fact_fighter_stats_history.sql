@@ -15,7 +15,8 @@ select
     f.opponent_id,
     f.match_outcome,
     f.is_winner,
-
+    f.weight_class,
+    e.event_type,
     sum(case when (f.match_outcome='win' and f.is_winner=true) then 1 else 0 end) over(
         partition by f.fighter_id
         order by e.event_date, f.fight_id

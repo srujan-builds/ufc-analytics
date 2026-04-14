@@ -2,10 +2,14 @@ with stg_fights as (
     select * from {{ ref('stg_fights_v') }}
 ),
 
+stg_events as (
+    select * from {{ ref('stg_events_v') }}
+),
+
 parsed_fights as (
     select 
         {{ generate_fight_id('fight_url') }} as fight_id,
-        {{ generate_event_id('event_url') }} as event_id,
+        {{ generate_event_id('sf.event_url') }} as event_id,
         championship_bout,
         {{ generate_fighter_id('fighter_1_url') }} as fighter_1_id,
         {{ generate_fighter_id('fighter_2_url') }} as fighter_2_id,
@@ -24,12 +28,29 @@ parsed_fights as (
         regexp_substr(sub, '([0-9]+)-([0-9]+)', 1, 1, 'e',2)::int as sub_2,
 
         lower(match_outcome) as match_outcome,
-        trim(weight_class) as weight_class,
+        se.event_date,
+        se.event_name,
+        -- trim(weight_class) as weight_class,
+        case 
+            when se.event_name ilike '%UFC 30%' and trim(weight_class) = 'Lightweight' then 'Lightweight'
+            -- when se.event_date = '1997-12-21' and trim(se.event_name) = 'UFC - Ultimate Japan' and trim(weight_class) = 'Welterweight' then 'Light Heavyweight'
+            -- when se.event_date = '1997-12-21' and trim(se.event_name) ilike '%UFC - Ultimate Japan%' and trim(weight_class) ilike '%Welterweight%' then 'Light Heavyweight'
+            when se.event_name ilike '%Ultimate Japan%' and trim(weight_class) in ('Lightweight', 'Welterweight', 'Middleweight') then 'Light Heavyweight'
+
+            when se.event_date < '2001-05-04' and trim(weight_class) = 'Lightweight' then 'Welterweight'
+            when se.event_date < '2001-05-04' and trim(weight_class) = 'Middleweight' then 'Light Heavyweight'
+
+            when trim(weight_class) = 'Open Weight' then 'Catchweight'
+            else trim(weight_class) 
+        end as weight_class,
+
         trim(method,'-') as won_by,
         round_num::int as round_num,
         fight_time,
-        extracted_at
-    from stg_fights
+        sf.extracted_at
+    from stg_fights as sf
+    inner join stg_events as se
+    on sf.event_url = se.event_url
 ),
 
 fighter_1_perspective as (
@@ -50,6 +71,9 @@ fighter_1_perspective as (
         str_1 as strikes_landed,
         td_1 as takedowns,
         sub_1 as submission_attempts,
+
+        event_date,
+        event_name,
         
         weight_class,
         won_by,
@@ -75,6 +99,9 @@ fighter_2_perspective as (
         str_2 as strikes_landed,
         td_2 as takedowns,
         sub_2 as submission_attempts,
+
+        event_date,
+        event_name,
         
         weight_class,
         won_by,
