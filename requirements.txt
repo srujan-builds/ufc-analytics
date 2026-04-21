@@ -4,3 +4,6 @@ ipykernel
 tqdm
 beautifulsoup4
 dbt-snowflake
+snowflake-connector-python[pandas]
+cryptography
+python-dotenv

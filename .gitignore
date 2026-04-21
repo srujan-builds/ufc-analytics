@@ -1,5 +1,6 @@
 venv
 .DS_Store
+.env
 
 *.terraform*
 *.tfstate
@@ -12,3 +13,5 @@ transform/target/
 transform/dbt_packages/
 transform/logs/
 transform/dbt_internal_packages/
+
+extract/__pycache__
