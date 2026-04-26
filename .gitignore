@@ -1,6 +1,7 @@
 venv
 .DS_Store
 .env
+__pycache__/
 
 *.terraform*
 *.tfstate
@@ -14,4 +15,7 @@ transform/dbt_packages/
 transform/logs/
 transform/dbt_internal_packages/
 
-extract/__pycache__
+
+
+dags/extract/snowflake_tf_snow_key.p8
+profiles.yml
