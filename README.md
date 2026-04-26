@@ -11,6 +11,10 @@ An end-to-end, fully automated data engineering pipeline that extracts live UFC 
 * **Security:** RSA Key-Pair Authentication
 * **Containerization:** Docker & Docker Compose
 
+## Data Model
+<img width="2060" height="1558" alt="image" src="https://github.com/user-attachments/assets/9eb8b5ad-c66b-4eea-a858-9f5e7cdff804" />
+
+
 
 ## Key Features
 
