@@ -7,6 +7,7 @@ An end-to-end, fully automated data engineering pipeline that extracts live UFC 
 * **Data Extraction:** Python (BeautifulSoup, Requests)
 * **Orchestration:** Apache Airflow (Dockerized)
 * **Data Warehouse:** Snowflake
+* **Infrastructure Setup:** Terraform
 * **Transformation:** dbt (Data Build Tool)
 * **Security:** RSA Key-Pair Authentication
 * **Containerization:** Docker & Docker Compose
