@@ -28,8 +28,8 @@ An end-to-end, fully automated data engineering pipeline that extracts live UFC 
 ```text
 ├── dags/
 │   ├── extract/              # Python extraction scripts (main.py, scraper.py, db_connector.py)
-│   ├── dbt_ufc/              # dbt project folder (models, macros, profiles.yml)
 │   └── ufc_pipeline_dag.py   # Airflow DAG definition
+|-- transform/                # dbt modles 
 ├── Dockerfile                # Custom Airflow image build with requirements
 ├── docker-compose.yaml       # Airflow cluster configuration
 ├── requirements.txt          # Python dependencies
